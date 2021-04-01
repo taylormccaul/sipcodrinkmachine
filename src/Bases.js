@@ -4,7 +4,7 @@ import './App.css';
 const bases = ["Sprite", "Diet Coke", "Coke", "Dr Pepper", "Mtn Dew", "Iced Tea", "Root Beer", "Red Bull", "Monster Zero", "Sparkling Water", "Water", "Lemonade"];
 
 class Bases extends React.Component {
-  /*constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       basechecks: bases.reduce(
@@ -16,12 +16,29 @@ class Bases extends React.Component {
       )
     }
 
+  }
+
+  /*handleBaseChange(e) {
+    const {name} = e.target;
+
+    this.setState(prevState => ({
+      basechecks: {
+        ...prevState.basechecks,
+        [name]: !prevState.basechecks[name]
+      }
+    }));
+
+    Object.keys(this.state.basechecks)
+      .filter(checkbox => this.state.basechecks[checkbox])
+      .forEach(checkbox => {
+        console.log(checkbox, "is selected.");
+      });
   }*/
 
   createCheckbox = base => (
     <div>
       <input type="checkbox" onChange={this.props.handleBaseChange} name={base} /*isSelected={this.state.basechecks[base]}*//>
-      <label for={base}>{base}</label>
+      <label htmlFor={base}>{base}</label>
     </div>
   );
 

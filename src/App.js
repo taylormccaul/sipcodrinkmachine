@@ -1,5 +1,6 @@
 import React/*, { Component }*/ from 'react';
 import Bases from "./Bases";
+import Syrups from "./Syrups";
 import './App.css';
 
 const bases = ["Sprite", "Diet Coke", "Coke", "Dr Pepper", "Mtn Dew", "Iced Tea", "Root Beer", "Red Bull", "Monster Zero", "Sparkling Water", "Water", "Lemonade"];
@@ -32,6 +33,7 @@ class App extends React.Component {
     }
 
     this.handleBaseChange = this.handleBaseChange.bind(this);
+    this.handleSyrupChange = this.handleSyrupChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -45,15 +47,25 @@ class App extends React.Component {
       }
     }));
 
-    Object.keys(this.state.basechecks)
+    /*Object.keys(this.state.basechecks)
       .filter(checkbox => this.state.basechecks[checkbox])
       .forEach(checkbox => {
         console.log(checkbox, "is selected.");
-      });
+      });*/
+  }
+
+  handleSyrupChange(e) {
+    const {name} = e.target;
+
+    this.setState(prevState => ({
+      syrupchecks: {
+        ...prevState.syrupchecks,
+        [name]: !prevState.syrupchecks[name]
+      }
+    }));
   }
 
   handleSubmit(e) {
-    //var includedBases = [];
     var excludedBases = Object.keys(this.state.basechecks).filter(checkbox => this.state.basechecks[checkbox]);
     for (let i = 0; i < bases.length; i++) {
       if (excludedBases.includes(bases[i])) {
@@ -62,11 +74,19 @@ class App extends React.Component {
         this.setState(prevState => ({
           includedBases: [...prevState.includedBases, bases[i]]
         }));
-        //includedBases.push(bases[i]);
       }
     }
 
-    //console.log(this.state.includedBases);
+    var excludedSyrups = Object.keys(this.state.syrupchecks).filter(checkbox => this.state.syrupchecks[checkbox]);
+    for (let i = 0; i < syrups.length; i++) {
+      if (excludedSyrups.includes(syrups[i])) {
+        continue;
+      } else {
+        this.setState(prevState => ({
+          includedSyrups: [...prevState.includedSyrups, syrups[i]]
+        }));
+      }
+    }
     e.preventDefault();
   }
 
@@ -86,11 +106,17 @@ class App extends React.Component {
         <h2>Exclusions</h2>
         <form onSubmit={this.handleSubmit}>
           <Bases handleBaseChange={this.handleBaseChange}/>
+          <Syrups handleSyrupChange={this.handleSyrupChange}/>
           <button type="submit">Submit</button>
         </form>
         <ul>
           {this.state.includedBases.map((base, index) => {
             return <li key={index}>{base}</li>
+          })}
+        </ul>
+        <ul>
+          {this.state.includedSyrups.map((syrup, index) => {
+            return <li key={index}>{syrup}</li>
           })}
         </ul>
       </div>

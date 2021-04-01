@@ -7,8 +7,8 @@ class Syrups extends React.Component {
 
   createCheckbox = syrup => (
     <div>
-      <input type="checkbox" onChange={this.props.handleCheckboxChange} name={syrup} /*isSelected={this.state.syrupchecks[syrup]}*//>
-      <label for={syrup}>{syrup}</label>
+      <input type="checkbox" onChange={this.props.handleSyrupChange} name={syrup} /*isSelected={this.state.syrupchecks[syrup]}*//>
+      <label htmlFor={syrup}>{syrup}</label>
     </div>
   );
 

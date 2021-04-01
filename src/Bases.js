@@ -20,7 +20,7 @@ class Bases extends React.Component {
 
   createCheckbox = base => (
     <div>
-      <input type="checkbox" onChange={this.props.handleCheckboxChange} name={base} /*isSelected={this.state.basechecks[base]}*//>
+      <input type="checkbox" onChange={this.props.handleBaseChange} name={base} /*isSelected={this.state.basechecks[base]}*//>
       <label for={base}>{base}</label>
     </div>
   );

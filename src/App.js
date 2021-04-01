@@ -3,6 +3,7 @@ import Bases from "./Bases";
 import './App.css';
 
 const bases = ["Sprite", "Diet Coke", "Coke", "Dr Pepper", "Mtn Dew", "Iced Tea", "Root Beer", "Red Bull", "Monster Zero", "Sparkling Water", "Water", "Lemonade"];
+const syrups = ["Black cherry", "Blackberry", "Blood orange", "Blue curacao", "Blue raspberry", "Blueberry", "Cherry", "Coconut", "Cranberry", "Grape", "Green Apple", "Grenadine", "Guava", /*"Huckleberry",*/ "Kiwi", "Orange", "Passion fruit", "Peach", "Pineapple", "Pomegranate", "Raspberry", "Strawberry", "Vanilla", "Watermelon"];
 
 class App extends React.Component {
   constructor(props) {
@@ -15,6 +16,13 @@ class App extends React.Component {
         }),
         {}
       ),
+      syrupchecks: syrups.reduce(
+        (syrups, syrup) => ({
+          ...syrups,
+          [syrup]: false
+        }),
+        {}
+      ),
       includedBases: [],
       includedSyrups: [],
       includedCreams: [],
@@ -23,11 +31,11 @@ class App extends React.Component {
       includedFrozen: [],
     }
 
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.handleBaseChange = this.handleBaseChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCheckboxChange(e) {
+  handleBaseChange(e) {
     const {name} = e.target;
 
     this.setState(prevState => ({
@@ -77,7 +85,7 @@ class App extends React.Component {
       <div className="app">
         <h2>Exclusions</h2>
         <form onSubmit={this.handleSubmit}>
-          <Bases handleCheckboxChange={this.handleCheckboxChange}/>
+          <Bases handleBaseChange={this.handleBaseChange}/>
           <button type="submit">Submit</button>
         </form>
         <ul>

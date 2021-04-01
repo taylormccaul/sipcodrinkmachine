@@ -1,7 +1,6 @@
-//import logo from './logo.svg';
-import React, { Component } from 'react';
+import React/*, { Component }*/ from 'react';
+import Bases from "./Bases";
 import './App.css';
-//import { ReactComponent } from '*.svg';
 
 const bases = ["Sprite", "Diet Coke", "Coke", "Dr Pepper", "Mtn Dew", "Iced Tea", "Root Beer", "Red Bull", "Monster Zero", "Sparkling Water", "Water", "Lemonade"];
 
@@ -9,78 +8,86 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkboxes: bases.reduce(
+      basechecks: bases.reduce(
         (bases, base) => ({
           ...bases,
           [base]: false
         }),
         {}
-      )
+      ),
+      includedBases: [],
+      includedSyrups: [],
+      includedCreams: [],
+      includedPurees: [],
+      includedFresh: [],
+      includedFrozen: [],
     }
 
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleCheckboxChange(e) {
     const {name} = e.target;
 
     this.setState(prevState => ({
-      checkboxes: {
-        ...prevState.checkboxes,
-        [name]: !prevState.checkboxes[name]
+      basechecks: {
+        ...prevState.basechecks,
+        [name]: !prevState.basechecks[name]
       }
     }));
-    console.log(this.state.checkboxes);
 
-    Object.keys(this.state.checkboxes)
-      .filter(checkbox => this.state.checkboxes[checkbox])
+    Object.keys(this.state.basechecks)
+      .filter(checkbox => this.state.basechecks[checkbox])
       .forEach(checkbox => {
         console.log(checkbox, "is selected.");
       });
   }
 
-  createCheckbox = base => (
-    <div>
-      <input type="checkbox" onChange={this.handleCheckboxChange} name={base} isSelected={this.state.checkboxes[base]}/>
-      <label for={base}>{base}</label>
-    </div>
-  );
+  handleSubmit(e) {
+    //var includedBases = [];
+    var excludedBases = Object.keys(this.state.basechecks).filter(checkbox => this.state.basechecks[checkbox]);
+    for (let i = 0; i < bases.length; i++) {
+      if (excludedBases.includes(bases[i])) {
+        continue;
+      } else {
+        this.setState(prevState => ({
+          includedBases: [...prevState.includedBases, bases[i]]
+        }));
+        //includedBases.push(bases[i]);
+      }
+    }
 
-  createCheckboxes = () => bases.map(this.createCheckbox);
+    //console.log(this.state.includedBases);
+    e.preventDefault();
+  }
+
+  /*displayBases() {
+    return(
+      <ul>
+        {this.state.includedBases.map((base, index) => {
+          <li key={index}>{base}</li>
+        })};
+      </ul>
+    )
+  }*/
 
   render() {
     return (
-      <form>
-        {this.createCheckboxes()}
-      {/*<div>
-          {bases.map(function(name, index){
-            return <input type="checkbox" value={name}></input>;
+      <div className="app">
+        <h2>Exclusions</h2>
+        <form onSubmit={this.handleSubmit}>
+          <Bases handleCheckboxChange={this.handleCheckboxChange}/>
+          <button type="submit">Submit</button>
+        </form>
+        <ul>
+          {this.state.includedBases.map((base, index) => {
+            return <li key={index}>{base}</li>
           })}
-        </div>*/}
-      </form>
+        </ul>
+      </div>
     );
   }
 }
-
-/*function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}*/
 
 export default App;

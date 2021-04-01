@@ -66,6 +66,23 @@ class App extends React.Component {
       includedPurees: [],
       includedFresh: [],
       includedFrozen: [],
+      maximumIngredients: 0,
+      maximumSyrups: 0,
+      maximumCreams: 0,
+      maximumPurees: 0,
+      maximumFresh: 0,
+      maximumFrozen: 0,
+      noOfSyrups: 0,
+      noOfCreams: 0,
+      noOfPurees: 0,
+      noOfFresh: 0,
+      noOfFrozen: 0,
+      ingredientValue: "",
+      syrupsValue: "",
+      creamsValue: "",
+      pureesValue: "",
+      freshValue: "",
+      frozenValue: "",
     }
 
     this.handleBaseChange = this.handleBaseChange.bind(this);
@@ -74,6 +91,7 @@ class App extends React.Component {
     this.handlePureeChange = this.handlePureeChange.bind(this);
     this.handleFreshChange = this.handleFreshChange.bind(this);
     this.handleFrozenChange = this.handleFrozenChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -221,7 +239,36 @@ class App extends React.Component {
       }
     }
 
+    this.setState({
+      maximumIngredients: parseInt(this.state.ingredientValue),
+      maximumSyrups: parseInt(this.state.syrupsValue),
+      maximumCreams: parseInt(this.state.creamsValue),
+      maximumPurees: parseInt(this.state.pureesValue),
+      maximumFresh: parseInt(this.state.freshValue),
+      maximumFrozen: parseInt(this.state.frozenValue)
+    });
+
+    /*const numberCheck = this.state.maximumSyrups 
+    + this.state.maximumCreams 
+    + this.state.maximumPurees 
+    + this.state.maximumFresh 
+    + this.state.maximumFrozen;
+    if (numberCheck > this.state.maximumIngredients) {
+      console.log(numberCheck);
+      console.log("Choose a number of ingredients lower than the maximum value.");
+    }*/
+
     e.preventDefault();
+  }
+
+  handleInputChange(e) {
+    const target = e.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   render() {
@@ -235,9 +282,46 @@ class App extends React.Component {
           <Purees handlePureeChange={this.handlePureeChange}/>
           <FreshFruit handleFreshChange={this.handleFreshChange}/>
           <FrozenFruit handleFrozenChange={this.handleFrozenChange}/>
+
+          <label for="ingredientValue">Maximum number of ingredients:</label>
+          <input type="text" 
+          value={this.state.ingredientValue} 
+          name="ingredientValue" 
+          onChange={this.handleInputChange}></input>
+
+          <label for="syrupsValue">Maximum number of syrups:</label>
+          <input type="text" 
+          value={this.state.syrupsValue} 
+          name="syrupsValue" 
+          onChange={this.handleInputChange}></input>
+
+          <label for="creamsValue">Maximum number of creams:</label>
+          <input type="text" 
+          value={this.state.creamsValue} 
+          name="creamsValue" 
+          onChange={this.handleInputChange}></input>
+
+          <label for="pureesValue">Maximum number of purees:</label>
+          <input type="text" 
+          value={this.state.pureesValue} 
+          name="pureesValue" 
+          onChange={this.handleInputChange}></input>
+
+          <label for="freshValue">Maximum number of fresh fruits:</label>
+          <input type="text" 
+          value={this.state.freshValue} 
+          name="freshValue" 
+          onChange={this.handleInputChange}></input>
+
+          <label for="frozenValue">Maximum number of frozen fruits:</label>
+          <input type="text" 
+          value={this.state.frozenValue} 
+          name="frozenValue" 
+          onChange={this.handleInputChange}></input>
+
           <button type="submit">Submit</button>
         </form>
-        <ul>
+        {/*<ul>
           {this.state.includedBases.map((base, index) => {
             return <li key={index}>{base}</li>
           })}
@@ -266,7 +350,7 @@ class App extends React.Component {
           {this.state.includedFrozen.map((frozen, index) => {
             return <li key={index}>{frozen}</li>
           })}
-        </ul>
+        </ul>*/}
       </div>
     );
   }

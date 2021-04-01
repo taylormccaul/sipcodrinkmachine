@@ -18,26 +18,9 @@ class Bases extends React.Component {
 
   }
 
-  /*handleBaseChange(e) {
-    const {name} = e.target;
-
-    this.setState(prevState => ({
-      basechecks: {
-        ...prevState.basechecks,
-        [name]: !prevState.basechecks[name]
-      }
-    }));
-
-    Object.keys(this.state.basechecks)
-      .filter(checkbox => this.state.basechecks[checkbox])
-      .forEach(checkbox => {
-        console.log(checkbox, "is selected.");
-      });
-  }*/
-
   createCheckbox = base => (
     <div>
-      <input type="checkbox" onChange={this.props.handleBaseChange} name={base} /*isSelected={this.state.basechecks[base]}*//>
+      <input type="checkbox" onChange={this.props.handleBaseChange} name={base} />
       <label htmlFor={base}>{base}</label>
     </div>
   );

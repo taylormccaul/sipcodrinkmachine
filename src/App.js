@@ -1,10 +1,14 @@
 import React/*, { Component }*/ from 'react';
 import Bases from "./Bases";
 import Syrups from "./Syrups";
+import Creams from "./Creams";
+import Purees from "./Purees";
 import './App.css';
 
 const bases = ["Sprite", "Diet Coke", "Coke", "Dr Pepper", "Mtn Dew", "Iced Tea", "Root Beer", "Red Bull", "Monster Zero", "Sparkling Water", "Water", "Lemonade"];
 const syrups = ["Black cherry", "Blackberry", "Blood orange", "Blue curacao", "Blue raspberry", "Blueberry", "Cherry", "Coconut", "Cranberry", "Grape", "Green Apple", "Grenadine", "Guava", /*"Huckleberry",*/ "Kiwi", "Orange", "Passion fruit", "Peach", "Pineapple", "Pomegranate", "Raspberry", "Strawberry", "Vanilla", "Watermelon"];
+const creams = ["Coconut cream", "Vanilla cream", "Half and half"];
+const purees = ["Strawberry puree", "Raspberry puree", "Mango puree", "Peach puree"];
 
 class App extends React.Component {
   constructor(props) {
@@ -24,6 +28,20 @@ class App extends React.Component {
         }),
         {}
       ),
+      creamchecks: creams.reduce(
+        (creams, cream) => ({
+          ...creams,
+          [cream]: false
+        }),
+        {}
+      ),
+      pureechecks: purees.reduce(
+        (purees, puree) => ({
+          ...purees,
+          [puree]: false
+        }),
+        {}
+      ),
       includedBases: [],
       includedSyrups: [],
       includedCreams: [],
@@ -34,6 +52,8 @@ class App extends React.Component {
 
     this.handleBaseChange = this.handleBaseChange.bind(this);
     this.handleSyrupChange = this.handleSyrupChange.bind(this);
+    this.handleCreamChange = this.handleCreamChange.bind(this);
+    this.handlePureeChange = this.handlePureeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -65,6 +85,28 @@ class App extends React.Component {
     }));
   }
 
+  handleCreamChange(e) {
+    const {name} = e.target;
+
+    this.setState(prevState => ({
+      creamchecks: {
+        ...prevState.creamchecks,
+        [name]: !prevState.creamchecks[name]
+      }
+    }));
+  }
+
+  handlePureeChange(e) {
+    const {name} = e.target;
+
+    this.setState(prevState => ({
+      pureechecks: {
+        ...prevState.pureechecks,
+        [name]: !prevState.pureechecks[name]
+      }
+    }));
+  }
+
   handleSubmit(e) {
     var excludedBases = Object.keys(this.state.basechecks).filter(checkbox => this.state.basechecks[checkbox]);
     for (let i = 0; i < bases.length; i++) {
@@ -77,7 +119,8 @@ class App extends React.Component {
       }
     }
 
-    var excludedSyrups = Object.keys(this.state.syrupchecks).filter(checkbox => this.state.syrupchecks[checkbox]);
+    var excludedSyrups = Object.keys(this.state.syrupchecks)
+    .filter(checkbox => this.state.syrupchecks[checkbox]);
     for (let i = 0; i < syrups.length; i++) {
       if (excludedSyrups.includes(syrups[i])) {
         continue;
@@ -87,18 +130,33 @@ class App extends React.Component {
         }));
       }
     }
+
+    var excludedCreams = Object.keys(this.state.creamchecks)
+    .filter(checkbox => this.state.creamchecks[checkbox]);
+    for (let i = 0; i < creams.length; i++) {
+      if (excludedCreams.includes(creams[i])) {
+        continue;
+      } else {
+        this.setState(prevState => ({
+          includedCreams: [...prevState.includedCreams, creams[i]]
+        }));
+      }
+    }
+
+    var excludedPurees = Object.keys(this.state.pureechecks)
+    .filter(checkbox => this.state.pureechecks[checkbox]);
+    for (let i = 0; i < purees.length; i++) {
+      if (excludedPurees.includes(purees[i])) {
+        continue;
+      } else {
+        this.setState(prevState => ({
+          includedPurees: [...prevState.includedPurees, purees[i]]
+        }));
+      }
+    }
+
     e.preventDefault();
   }
-
-  /*displayBases() {
-    return(
-      <ul>
-        {this.state.includedBases.map((base, index) => {
-          <li key={index}>{base}</li>
-        })};
-      </ul>
-    )
-  }*/
 
   render() {
     return (
@@ -107,6 +165,8 @@ class App extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <Bases handleBaseChange={this.handleBaseChange}/>
           <Syrups handleSyrupChange={this.handleSyrupChange}/>
+          <Creams handleCreamChange={this.handleCreamChange}/>
+          <Purees handlePureeChange={this.handlePureeChange}/>
           <button type="submit">Submit</button>
         </form>
         <ul>
@@ -117,6 +177,16 @@ class App extends React.Component {
         <ul>
           {this.state.includedSyrups.map((syrup, index) => {
             return <li key={index}>{syrup}</li>
+          })}
+        </ul>
+        <ul>
+          {this.state.includedCreams.map((cream, index) => {
+            return <li key={index}>{cream}</li>
+          })}
+        </ul>
+        <ul>
+          {this.state.includedPurees.map((puree, index) => {
+            return <li key={index}>{puree}</li>
           })}
         </ul>
       </div>

@@ -83,6 +83,7 @@ class App extends React.Component {
       pureesValue: "",
       freshValue: "",
       frozenValue: "",
+      drink: []
     }
 
     this.handleBaseChange = this.handleBaseChange.bind(this);
@@ -93,6 +94,8 @@ class App extends React.Component {
     this.handleFrozenChange = this.handleFrozenChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.makeDrink = this.makeDrink.bind(this);
+    this.excludeIngredients = this.excludeIngredients.bind(this);
   }
 
   handleBaseChange(e) {
@@ -167,9 +170,25 @@ class App extends React.Component {
     }));
   }
 
+  excludeIngredients(startingArr, exclusionArr, includedArr) {
+    for (let i = 0; i < startingArr.length; i++) {
+      if (exclusionArr.includes(startingArr[i])) {
+        continue;
+      } else {
+        this.setState(prevState => ({
+          includedArr: [...prevState.includedArr, startingArr[i]]
+        }));
+      }
+    }
+    return includedArr;
+  }
+
   handleSubmit(e) {
     var excludedBases = Object.keys(this.state.basechecks).filter(checkbox => this.state.basechecks[checkbox]);
-    for (let i = 0; i < bases.length; i++) {
+    this.setState({
+      includedBases: []
+    });
+    /*for (let i = 0; i < bases.length; i++) {
       if (excludedBases.includes(bases[i])) {
         continue;
       } else {
@@ -177,7 +196,8 @@ class App extends React.Component {
           includedBases: [...prevState.includedBases, bases[i]]
         }));
       }
-    }
+    }*/
+    this.excludeIngredients(bases, excludedBases, this.state.includedBases);
 
     var excludedSyrups = Object.keys(this.state.syrupchecks)
     .filter(checkbox => this.state.syrupchecks[checkbox]);
@@ -258,6 +278,8 @@ class App extends React.Component {
       console.log("Choose a number of ingredients lower than the maximum value.");
     }*/
 
+    this.makeDrink();
+
     e.preventDefault();
   }
 
@@ -268,6 +290,46 @@ class App extends React.Component {
 
     this.setState({
       [name]: value
+    });
+  }
+
+  makeDrink() {
+    var randomDrink = [];
+    var randomBase = this.state.includedBases[Math.floor(Math.random() * this.state.includedBases.length)];
+    console.log(randomBase);
+    randomDrink.push(randomBase);
+    var randomSyrups = [];
+    for (let i = 0; i < this.state.maximumSyrups; i++) {
+      var currSyrup = this.state.includedSyrups[Math.floor(Math.random() * this.state.includedSyrups.length)];
+      randomSyrups.push(currSyrup);
+    }
+
+    var randomCream = this.state.includedCreams[Math.floor(Math.random() * this.state.includedCreams.length)];
+		var randomPuree = this.state.includedPurees[Math.floor(Math.random() * this.state.includedPurees.length)];
+
+    var randomFresh = this.state.includedFresh[Math.floor(Math.random() * this.state.includedFresh.length)];
+    var randomFrozen = this.state.includedFrozen[Math.floor(Math.random() * this.state.includedFrozen.length)];
+
+    for (let i = 0; i < this.state.maximumSyrups; i++) {
+      randomDrink.push(randomSyrups[i]);
+    }
+
+    var pureeOrCream = Math.floor(Math.random() * 2);
+
+    if (pureeOrCream === 0 && this.state.maximumPurees > 0) {
+      randomDrink.push(randomPuree);
+    } else if (pureeOrCream === 1 && this.state.maximumCreams > 0) {
+      randomDrink.push(randomCream);
+    }
+
+    if (this.state.maximumFresh > 0) {
+      randomDrink.push(randomFresh);
+    } else if (this.state.maximumFrozen > 0) {
+      randomDrink.push(randomFrozen);
+    }
+
+    this.setState({
+      drink: randomDrink
     });
   }
 
@@ -321,6 +383,11 @@ class App extends React.Component {
 
           <button type="submit">Submit</button>
         </form>
+        <ul>
+          {this.state.drink.map((ing, index) => {
+            return <li key={index}>{ing}</li>
+          })}
+        </ul>
         {/*<ul>
           {this.state.includedBases.map((base, index) => {
             return <li key={index}>{base}</li>
